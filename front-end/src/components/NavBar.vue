@@ -1,43 +1,40 @@
 <template>
   <div>
-    <div v-if="user">
-      <NavBar />
-      <BakeryHome />
+    <div id="app">
+      <div id="menu">
+        <div id="brand">
+          <router-link to="/"> <img src="/images/logo.png"/></router-link>
+        </div>
+        <div id="side">
+          <div class="menu-item browse">
+            <router-link to="/brownies">Brownies</router-link>
+          </div>
+          <div class="menu-item browse">
+            <router-link to="/cookies">Cookies</router-link>
+          </div>
+          <div class="menu-item browse">
+            <router-link to="/about">About</router-link>
+          </div>
+
+          <router-link to="/cart">
+            <div class="menu-item">
+              <p>{{ numberOfItems }} Items</p>
+            </div>
+          </router-link>
+        </div>
+      </div>
+      <router-view />
+      <Footer />
     </div>
-    <div v-else>
-      <Login />
-    </div>
+    <BakeryHome />
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import Login from "@/components/Login.vue";
-import BakeryHome from "@/components/BakeryHome.vue";
-import NavBar from "../components/NavBar.vue";
 export default {
-  name: "login",
-  components: {
-    Login,
-    BakeryHome,
-    NavBar
-  },
-  async created() {
-    try {
-      let response = await axios.get("/api/users");
-      this.$root.$data.user = response.data.user;
-    } catch (error) {
-      this.$root.$data.user = null;
-    }
-  },
-  computed: {
-    user() {
-      return this.$root.$data.user;
-    }
-  }
+  name: "NavBar"
 };
 </script>
-
 <style>
 @import url("https://fonts.googleapis.com/css?family=Bangers&display=swap");
 * {

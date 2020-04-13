@@ -2,16 +2,15 @@
   <div>
     <h1>Welcome to The Little Bakery</h1>
     <img src="/images/bakery2.jpg" />
+    <Footer />
   </div>
 </template>
 
 <script>
-//import ProductList from "../components/ProductList.vue"
+import Footer from "../components/Footer.vue";
 export default {
   name: "About",
-  components: {
-    //ProductList
-  }
+  components: { Footer }
 };
 </script>
 

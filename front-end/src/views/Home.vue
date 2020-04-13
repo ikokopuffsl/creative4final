@@ -16,7 +16,7 @@ import Login from "@/components/Login.vue";
 import BakeryHome from "@/components/BakeryHome.vue";
 import NavBar from "../components/NavBar.vue";
 export default {
-  name: "login",
+  name: "home",
   components: {
     Login,
     BakeryHome,

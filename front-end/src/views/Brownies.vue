@@ -1,9 +1,15 @@
 <template>
   <div>
-    <NavBar />
-    <h1>Brroowwnniieess</h1>
-    <div class="container-fluid text-size">
-      <BakeryList :products="products" />
+    <div v-if="user">
+      <NavBar />
+      <h1>Brroowwnniieess</h1>
+      <div class="container-fluid text-size">
+        <BakeryList :products="products" />
+      </div>
+      <Footer />
+    </div>
+    <div v-else>
+      <Login />
     </div>
   </div>
 </template>
@@ -11,11 +17,15 @@
 <script>
 import BakeryList from "../components/BakeryList.vue";
 import NavBar from "../components/NavBar.vue";
+import Footer from "../components/Footer.vue";
+import Login from "../components/Login.vue";
 export default {
   name: "Brownies",
   components: {
     BakeryList,
-    NavBar
+    NavBar,
+    Footer,
+    Login
   },
   data() {
     return {
@@ -25,6 +35,9 @@ export default {
   computed: {
     products() {
       return this.$root.$data.products[1];
+    },
+    user() {
+      return this.$root.$data.user;
     }
   },
   methods: {

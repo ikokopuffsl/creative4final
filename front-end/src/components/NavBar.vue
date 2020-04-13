@@ -2,6 +2,13 @@
   <div>
     <div id="app">
       <div id="menu">
+        <div id="left-side">
+          <div class="menu-item browse">
+            <button @click="logout" class="pure-button pure-button-primary">
+              Logout
+            </button>
+          </div>
+        </div>
         <div id="brand">
           <router-link to="/"> <img src="/images/logo.png"/></router-link>
         </div>
@@ -31,8 +38,19 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
-  name: "NavBar"
+  name: "NavBar",
+  methods: {
+    async logout() {
+      try {
+        await axios.delete("/api/users");
+        this.$root.$data.user = null;
+      } catch (error) {
+        this.$root.$data.user = null;
+      }
+    }
+  }
 };
 </script>
 <style>

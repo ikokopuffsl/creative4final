@@ -11,34 +11,26 @@ const User = users.model;
 const validUser = users.valid;
 
 // This is the schema for a ticket
-const ticketSchema = new mongoose.Schema({
-  id: String,
-  name: String,
-  price: String,
-  image: String,
-  inStock: {
-    type: String,
-    default: "Yes",
+const cartSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
   },
+  id: String,
 });
 
-const Ticket = mongoose.model("Item", ticketSchema);
+const Cart = mongoose.model("Cart", cartSchema);
 
-// get tickets -- will list tickets that a user has submitted
+// get cart -- will list cart items that a user has added
 router.get("/", validUser, async (req, res) => {
-  let tickets = [];
+  let items = [];
   try {
-    if (req.user.role === "admin") {
-      tickets = await Ticket.find().sort({
-        created: -1,
-      });
-    } else {
-      tickets = await Ticket.find({
-        user: req.user,
-      }).sort({
-        created: -1,
-      });
-    }
+    tickets = await Ticket.find({
+      user: req.user,
+    }).sort({
+      created: -1,
+    });
+
     return res.send({
       tickets: tickets,
     });

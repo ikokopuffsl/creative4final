@@ -11,28 +11,79 @@ const User = users.model;
 const validUser = users.valid;
 
 // This is the schema for a ticket
-const cartSchema = new mongoose.Schema({
+const itemSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.ObjectId,
     ref: "User",
   },
-  id: String,
+  id: Number,
+  productId: Number,
+  name: String,
+  image: String,
+  price: String,
 });
 
-const Cart = mongoose.model("Cart", cartSchema);
+const Item = mongoose.model("Item", itemSchema);
 
-// get cart -- will list cart items that a user has added
-router.get("/", validUser, async (req, res) => {
+// get Item -- will list cart items that a user has
+router.get("/a", validUser, async (req, res) => {
   let items = [];
   try {
-    tickets = await Ticket.find({
+    items = await Item.find({
+      user: req.user,
+    }).sort({
+      created: -1,
+    });
+    return res.send({
+      items: items,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
+// add item
+router.post("/", validUser, async (req, res) => {
+  const item = new Item({
+    user: req.user,
+    id: req.body.id,
+    productId: req.body.productId,
+    name: req.body.name,
+    image: req.body.image,
+    price: req.body.price,
+  });
+  try {
+    await item.save();
+    return res.send({
+      item: item,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
+// delete
+router.delete("/:id", validUser, async (req, res) => {
+  let items = [];
+  try {
+    items = await Item.find({
       user: req.user,
     }).sort({
       created: -1,
     });
 
-    return res.send({
-      tickets: tickets,
+    let currentItem = "temp";
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].id === Number(req.params.id)) {
+        currentItem = items[i];
+      }
+    }
+
+    await Item.findByIdAndRemove(currentItem._id, function (err, val) {
+      if (err) res.json(err);
+      else res.json("sucessfully removed");
     });
   } catch (error) {
     console.log(error);
@@ -40,43 +91,23 @@ router.get("/", validUser, async (req, res) => {
   }
 });
 
-// create a ticket
-router.post("/", validUser, async (req, res) => {
-  const ticket = new Ticket({
-    user: req.user,
-    problem: req.body.problem,
-  });
-  try {
-    await ticket.save();
-    return res.send({
-      ticket: ticket,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.sendStatus(500);
-  }
-});
-
-// edit a ticket -- only edits status and response
+// edit a cart
 router.put("/:id", validUser, async (req, res) => {
   // can only do this if an administrator
-  if (req.user.role !== "admin") {
-    return res.sendStatus(403);
-  }
   if (!req.body.status || !req.body.response) {
     return res.status(400).send({
       message: "status and response are required",
     });
   }
   try {
-    ticket = await Ticket.findOne({
+    item = await Item.findOne({
       _id: req.params.id,
     });
-    ticket.status = req.body.status;
-    ticket.response = req.body.response;
-    await ticket.save();
+    item.status = req.body.status;
+    item.response = req.body.response;
+    await item.save();
     return res.send({
-      ticket: ticket,
+      item: item,
     });
   } catch (error) {
     console.log(error);

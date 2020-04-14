@@ -19,26 +19,27 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "ProductList",
   props: {
     products: Array
   },
   methods: {
-    addToCart(product) {
+    async addToCart(product) {
       if (product.inStock) {
-        this.$root.$data.cart.push(product);
+        try {
+          await axios.post("/api/items", {
+            id: Date.now(),
+            productId: product.id,
+            name: product.name,
+            image: product.image,
+            price: product.price
+          });
+        } catch (error) {
+          console.log(error);
+        }
       }
-      /*if (!this.$root.$data.cart.has(product)){
-        debugger
-        this.$root.$data.cart = this.$root.$data.cart.set(product,1);
-        //console.log(this.$root.$data.cart);
-      }
-      else{
-        var d = this.$root.$data.cart.get(product);
-        this.$root.$data.cart = this.$root.$data.cart.set(product,d+1);
-        //console.log(this.$root.$data.cart);
-      }*/
     }
   }
 };

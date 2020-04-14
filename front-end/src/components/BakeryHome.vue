@@ -9,7 +9,7 @@
 <script>
 import Footer from "../components/Footer.vue";
 export default {
-  name: "About",
+  name: "BakeryHome",
   components: { Footer }
 };
 </script>

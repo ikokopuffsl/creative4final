@@ -25,7 +25,7 @@
 
           <router-link to="/cart">
             <div class="menu-item">
-              <p>{{ numberOfItems }} Items</p>
+              <p>Items</p>
             </div>
           </router-link>
         </div>
@@ -33,7 +33,6 @@
       <router-view />
       <Footer />
     </div>
-    <BakeryHome />
   </div>
 </template>
 

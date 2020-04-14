@@ -62,7 +62,7 @@
 <script>
 import axios from "axios";
 export default {
-  name: "HomePage",
+  name: "Login",
   data() {
     return {
       firstName: "",
